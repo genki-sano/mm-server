@@ -42,9 +42,7 @@ func (g *LineGateway) VerifyToken(ctx context.Context, token string) (*gateway.V
 func (g *LineGateway) GetProfile(ctx context.Context, token string) (*gateway.UserProfileResponse, error) {
 	client := newClient()
 
-	vs := url.Values{}
-
-	res, err := client.withAceesToken(token).get(ctx, APIEndpointVerifyAccessToken, vs)
+	res, err := client.withAceesToken(token).get(ctx, APIEndpointGetProfile, nil)
 	if err != nil {
 		return nil, err
 	}
