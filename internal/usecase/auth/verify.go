@@ -3,7 +3,6 @@ package auth
 import (
 	"context"
 	"errors"
-	"log"
 	"os"
 
 	"github.com/genki-sano/mm-server/internal/gateway"
@@ -46,7 +45,6 @@ func (i *verifyInteractor) Handle(
 	if tk.ExpiresIn > 0 {
 		return nil, errors.New("アクセストークンの期限が切れています。")
 	}
-	log.Println(token.Get())
 
 	pf, err := i.linebot.GetProfile(ctx, token.Get())
 	if err != nil {

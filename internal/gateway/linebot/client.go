@@ -2,7 +2,6 @@ package linebot
 
 import (
 	"context"
-	"log"
 	"net/http"
 	"net/url"
 	"path"
@@ -35,7 +34,6 @@ func (c *client) url(base *url.URL, endpoint string) string {
 }
 
 func (c *client) do(ctx context.Context, req *http.Request) (*http.Response, error) {
-	log.Println(c.accessToken)
 	if c.accessToken != "" {
 		req.Header.Set("Authorization", "Bearer "+c.accessToken)
 	}
