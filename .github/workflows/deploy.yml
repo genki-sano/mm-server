@@ -10,8 +10,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Set up Go 1.15
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.15
+
       - name: Checkout repository
         uses: actions/checkout@v2
+
+      - name: Install wire
+        run: go get github.com/google/wire/cmd/wire
+
+      - name: Run wire
+        run: wire
+        working-directory: ./cmd/http/di
 
       - name: Setup Cloud SDK
         uses: google-github-actions/setup-gcloud@master
