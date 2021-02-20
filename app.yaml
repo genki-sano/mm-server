@@ -1,3 +1,3 @@
-runtime: go114
+runtime: go115
 
 main: ./cmd/http
