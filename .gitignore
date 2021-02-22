@@ -17,8 +17,9 @@ temp/
 # Wire
 wire_gen.go
 
-# Firebase
+# GCP
 .credentials/
+secret.yaml
 
 # Others
 .DS_Store

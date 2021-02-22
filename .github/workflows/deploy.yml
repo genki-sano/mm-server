@@ -25,6 +25,11 @@ jobs:
         run: wire
         working-directory: ./cmd/http/di
 
+      - name: Install sops
+        run: |
+          wget https://github.com/mozilla/sops/releases/download/v3.6.1/sops_3.6.1_amd64.deb
+          sudo dpkg -i sops_3.6.1_amd64.deb
+
       - name: Setup Cloud SDK
         uses: google-github-actions/setup-gcloud@master
         with:
@@ -33,4 +38,6 @@ jobs:
           export_default_credentials: true
 
       - name: Deploy to App Engine
-        run: gcloud app deploy app.yaml --quiet --no-promote --version v1
+        run: |
+          sops -d secret.enc.yaml > secret.yaml
+          gcloud app deploy app.yaml --quiet --no-promote --version v1
