@@ -1,2 +1,0 @@
-creation_rules:
-  - gcp_kms: projects/money-maneger-304709/locations/global/keyRings/sops/cryptoKeys/sops-key
