@@ -45,6 +45,7 @@ func createEngine() *gin.Engine {
 	config.AllowCredentials = true
 	config.AllowOrigins = []string{
 		"http://localhost:3000",
+		"https://mm-client-0506.netlify.app",
 	}
 	r.Use(cors.New(config))
 
