@@ -2,8 +2,10 @@ up:
 	docker-compose up -d --build
 down:
 	docker-compose down
-logs:
+app_logs:
 	docker-compose logs -f app
+db_logs:
+	docker-compose logs -f db
 
 install_wire:
 	@type wire > /dev/null 2>&1 || go get github.com/google/wire/cmd/wire

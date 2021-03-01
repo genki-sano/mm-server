@@ -14,6 +14,10 @@
 # Air
 temp/
 
+# Mysql logs
+build/db/logs/*
+!build/db/logs/.gitkeep
+
 # Wire
 wire_gen.go
 
