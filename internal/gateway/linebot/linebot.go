@@ -7,14 +7,6 @@ import (
 	"github.com/genki-sano/mm-server/internal/gateway"
 )
 
-const (
-	// APIEndpointVerifyAccessToken const
-	APIEndpointVerifyAccessToken = "/oauth2/v2.1/verify"
-
-	// APIEndpointGetProfile const
-	APIEndpointGetProfile = "/v2/profile"
-)
-
 type lineGateway struct{}
 
 // NewLineGateway method
@@ -23,26 +15,34 @@ func NewLineGateway() gateway.LineDataAccess {
 }
 
 func (g *lineGateway) VerifyToken(ctx context.Context, token string) (*gateway.VerifyTokenResponse, error) {
-	client := newClient()
+	client, err := newClient()
+	if err != nil {
+		return nil, err
+	}
 
 	vs := url.Values{}
 	vs.Set("access_token", token)
 
-	res, err := client.get(ctx, APIEndpointVerifyAccessToken, vs)
+	res, err := client.get(ctx, APIEndpointVerifyToken, vs)
 	if err != nil {
 		return nil, err
 	}
 
+	defer closeResponse(res)
 	return decodeToVerifyTokenResponse(res)
 }
 
 func (g *lineGateway) GetProfile(ctx context.Context, token string) (*gateway.UserProfileResponse, error) {
-	client := newClient()
-
-	res, err := client.withAceesToken(token).get(ctx, APIEndpointGetProfile, nil)
+	client, err := newClient(withAceesToken(token))
 	if err != nil {
 		return nil, err
 	}
 
+	res, err := client.get(ctx, APIEndpointGetProfile, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	defer closeResponse(res)
 	return decodeToUserProfileResponse(res)
 }

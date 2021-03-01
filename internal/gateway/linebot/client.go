@@ -2,29 +2,53 @@ package linebot
 
 import (
 	"context"
+	"io"
+	"io/ioutil"
 	"net/http"
 	"net/url"
 	"path"
 )
 
-// APIEndpointBase const
-const APIEndpointBase = "https://api.line.me"
+// APIEndpoint constants
+const (
+	APIEndpointBase = "https://api.line.me"
+
+	APIEndpointVerifyToken = "/oauth2/v2.1/verify"
+	APIEndpointGetProfile  = "/v2/profile"
+)
 
 type client struct {
-	accessToken string
-	httpClient  *http.Client
+	endpointBase *url.URL
+	httpClient   *http.Client
+	accessToken  string
 }
 
-func newClient() *client {
-	return &client{
-		accessToken: "",
-		httpClient:  http.DefaultClient,
+type clientOption func(*client) error
+
+func newClient(options ...clientOption) (*client, error) {
+	c := &client{
+		httpClient: http.DefaultClient,
 	}
+	u, err := url.ParseRequestURI(APIEndpointBase)
+	if err != nil {
+		return nil, err
+	}
+	c.endpointBase = u
+
+	for _, option := range options {
+		err := option(c)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return c, nil
 }
 
-func (c *client) withAceesToken(token string) *client {
-	c.accessToken = token
-	return c
+func withAceesToken(token string) clientOption {
+	return func(c *client) error {
+		c.accessToken = token
+		return nil
+	}
 }
 
 func (c *client) url(base *url.URL, endpoint string) string {
@@ -45,11 +69,7 @@ func (c *client) do(ctx context.Context, req *http.Request) (*http.Response, err
 }
 
 func (c *client) get(ctx context.Context, endpoint string, query url.Values) (*http.Response, error) {
-	u, err := url.ParseRequestURI(APIEndpointBase)
-	if err != nil {
-		return nil, err
-	}
-	req, err := http.NewRequest(http.MethodGet, c.url(u, endpoint), nil)
+	req, err := http.NewRequest(http.MethodGet, c.url(c.endpointBase, endpoint), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -57,4 +77,20 @@ func (c *client) get(ctx context.Context, endpoint string, query url.Values) (*h
 		req.URL.RawQuery = query.Encode()
 	}
 	return c.do(ctx, req)
+}
+
+func (c *client) post(ctx context.Context, endpoint string, body io.Reader) (*http.Response, error) {
+	req, err := http.NewRequest(http.MethodPost, c.url(c.endpointBase, endpoint), body)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("Content-Type", "application/json; charset=UTF-8")
+	return c.do(ctx, req)
+}
+
+// @see https://github.com/google/go-github/pull/317
+func closeResponse(res *http.Response) error {
+	defer res.Body.Close()
+	_, err := io.Copy(ioutil.Discard, res.Body)
+	return err
 }
