@@ -15,16 +15,14 @@ const (
 	APIEndpointGetProfile = "/v2/profile"
 )
 
-// LineGateway type
-type LineGateway struct{}
+type lineGateway struct{}
 
 // NewLineGateway method
 func NewLineGateway() gateway.LineDataAccess {
-	return &LineGateway{}
+	return &lineGateway{}
 }
 
-// VerifyToken method
-func (g *LineGateway) VerifyToken(ctx context.Context, token string) (*gateway.VerifyTokenResponse, error) {
+func (g *lineGateway) VerifyToken(ctx context.Context, token string) (*gateway.VerifyTokenResponse, error) {
 	client := newClient()
 
 	vs := url.Values{}
@@ -38,8 +36,7 @@ func (g *LineGateway) VerifyToken(ctx context.Context, token string) (*gateway.V
 	return decodeToVerifyTokenResponse(res)
 }
 
-// GetProfile method
-func (g *LineGateway) GetProfile(ctx context.Context, token string) (*gateway.UserProfileResponse, error) {
+func (g *lineGateway) GetProfile(ctx context.Context, token string) (*gateway.UserProfileResponse, error) {
 	client := newClient()
 
 	res, err := client.withAceesToken(token).get(ctx, APIEndpointGetProfile, nil)

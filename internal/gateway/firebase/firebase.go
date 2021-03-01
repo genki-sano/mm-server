@@ -8,16 +8,14 @@ import (
 	"github.com/genki-sano/mm-server/internal/gateway"
 )
 
-// FirebaseGateway type
-type FirebaseGateway struct{}
+type firebaseGateway struct{}
 
 // NewFirebaseGateway method
 func NewFirebaseGateway() gateway.FirebaseDataAccess {
-	return &FirebaseGateway{}
+	return &firebaseGateway{}
 }
 
-// CreateCustomToken method
-func (g *FirebaseGateway) CreateCustomToken(ctx context.Context, uid string) (string, error) {
+func (g *firebaseGateway) CreateCustomToken(ctx context.Context, uid string) (string, error) {
 	app, err := fb.NewApp(context.Background(), nil)
 	if err != nil {
 		return "", err
