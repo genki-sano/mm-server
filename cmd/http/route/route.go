@@ -24,11 +24,15 @@ func Route() *gin.Engine {
 	})
 
 	api := e.Group("/api")
+
+	auth := api.Group("/auth")
 	{
-		auth := api.Group("/auth")
-		{
-			auth.GET("/verify", di.InitializeAuthVerify().Handler)
-		}
+		auth.GET("/verify", di.InitializeAuthVerify().Handler)
+	}
+
+	user := api.Group("/user")
+	{
+		user.GET("/list", di.InitializeUserList().Handler)
 	}
 
 	return e
