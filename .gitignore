@@ -23,4 +23,5 @@ secret.yaml
 
 # Others
 .DS_Store
+.env
 .env.local
