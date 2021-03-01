@@ -1,9 +1,5 @@
 package valueobject
 
-import (
-	"errors"
-)
-
 // AccessToken type
 type AccessToken struct {
 	value string
@@ -12,12 +8,13 @@ type AccessToken struct {
 // NewAccessToken method
 func NewAccessToken(value string) (*AccessToken, error) {
 	if value == "" {
-		return nil, errors.New("アクセストークンは必須です。")
+		return nil, newRequiredError("アクセストークン")
 	}
-	vo := &AccessToken{
-		value: value,
+	if containMutibyte(value) {
+		return nil, newContainMutibyteError("アクセストークン")
 	}
-	return vo, nil
+
+	return &AccessToken{value: value}, nil
 }
 
 // Get method
