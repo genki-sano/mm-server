@@ -15,6 +15,11 @@ func newRequiredError(field string) error {
 	return errors.New(msg)
 }
 
+func newFormatError(field string) error {
+	msg := fmt.Sprintf("%sは正しい形式ではありません。", field)
+	return errors.New(msg)
+}
+
 func newContainMutibyteError(field string) error {
 	msg := fmt.Sprintf("%sに利用できない文字が含まれています。", field)
 	return errors.New(msg)
