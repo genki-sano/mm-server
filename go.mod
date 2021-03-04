@@ -7,4 +7,5 @@ require (
 	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-gonic/gin v1.6.3
 	github.com/google/wire v0.5.0
+	google.golang.org/api v0.17.0
 )
