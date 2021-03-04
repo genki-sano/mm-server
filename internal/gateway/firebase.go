@@ -1,8 +1,6 @@
 package gateway
 
-import (
-	"context"
-)
+import "context"
 
 // FirebaseDataAccess type
 type FirebaseDataAccess interface {

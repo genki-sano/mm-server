@@ -1,8 +1,6 @@
 package gateway
 
-import (
-	"context"
-)
+import "context"
 
 // LineDataAccess type
 type LineDataAccess interface {

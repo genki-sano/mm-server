@@ -2,12 +2,11 @@ package helper
 
 import (
 	"encoding/json"
-	"errors"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/genki-sano/mm-server/internal/errs"
 	"github.com/genki-sano/mm-server/internal/presenter"
 )
 
@@ -41,10 +40,6 @@ func CreateSuccessResponseData(p presenter.I) ResposeData {
 
 // CreateErrorResponseData method
 func CreateErrorResponseData(status int, err error) ResposeData {
-	var lerr *errs.LinebotError
-	if errors.As(err, &lerr) {
-		status = http.StatusBadRequest
-	}
 	return ResposeData{
 		Status: status,
 		Body:   CreateErrorMessage(err),
@@ -56,7 +51,10 @@ func CreateErrorMessage(err error) []byte {
 	res := ErrorMessage{
 		Error: err.Error(),
 	}
-	// TODO: エラーハンドリングを悩み中
-	body, _ := json.Marshal(res)
+	body, err := json.Marshal(res)
+	if err != nil {
+		// TODO: エラーハンドリングを悩み中
+		log.Fatalf(err.Error())
+	}
 	return body
 }

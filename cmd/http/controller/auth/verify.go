@@ -26,13 +26,13 @@ func NewVerifyController(u usecase.AuthVerifyUsecase) *VerifyController {
 func (c *VerifyController) Handler(ctx *gin.Context) {
 	accessToken, err := valueobject.NewAccessToken(ctx.Query("token"))
 	if err != nil {
-		helper.Response(ctx, helper.CreateErrorResponseData(http.StatusInternalServerError, err))
+		helper.Response(ctx, helper.CreateErrorResponseData(http.StatusBadRequest, err))
 		return
 	}
 
 	res, err := c.u.Handle(ctx, accessToken)
 	if err != nil {
-		helper.Response(ctx, helper.CreateErrorResponseData(http.StatusInternalServerError, err))
+		helper.Response(ctx, helper.CreateErrorResponseData(http.StatusBadRequest, err))
 		return
 	}
 
