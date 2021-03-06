@@ -10,3 +10,8 @@ import (
 type PaymentDataAccess interface {
 	GetByDate(time.Time) ([]*entity.Payment, error)
 }
+
+// UserDataAccess type
+type UserDataAccess interface {
+	GetAll() ([]*entity.User, error)
+}
