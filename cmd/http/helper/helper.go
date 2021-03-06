@@ -40,6 +40,7 @@ func CreateSuccessResponseData(p presenter.I) ResposeData {
 
 // CreateErrorResponseData method
 func CreateErrorResponseData(status int, err error) ResposeData {
+	log.Printf("ERROR: %s", err.Error())
 	return ResposeData{
 		Status: status,
 		Body:   CreateErrorMessage(err),
