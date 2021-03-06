@@ -1,16 +1,14 @@
 package valueobject
 
-import (
-	"time"
-)
+import "time"
 
-// PaymentDate type
-type PaymentDate struct {
+// Date type
+type Date struct {
 	value time.Time
 }
 
-// NewPaymentDate method
-func NewPaymentDate(value string) (*PaymentDate, error) {
+// NewDate method
+func NewDate(value string) (*Date, error) {
 	if value == "" {
 		return nil, newRequiredError("日付")
 	}
@@ -20,10 +18,10 @@ func NewPaymentDate(value string) (*PaymentDate, error) {
 		return nil, newFormatError("日付")
 	}
 
-	return &PaymentDate{value: date}, nil
+	return &Date{value: date}, nil
 }
 
 // Get method
-func (vo *PaymentDate) Get() time.Time {
+func (vo *Date) Get() time.Time {
 	return vo.value
 }

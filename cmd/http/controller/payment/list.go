@@ -24,7 +24,7 @@ func NewListController(u usecase.PaytmentListUsecase) *ListController {
 
 // Handler method
 func (c *ListController) Handler(ctx *gin.Context) {
-	date, err := valueobject.NewPaymentDate(ctx.Query("date"))
+	date, err := valueobject.NewDate(ctx.Query("date"))
 	if err != nil {
 		helper.Response(ctx, helper.CreateErrorResponseData(http.StatusBadRequest, err))
 		return

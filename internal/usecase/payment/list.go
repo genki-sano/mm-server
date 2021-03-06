@@ -28,7 +28,7 @@ func NewListUsecase(
 // Handle method
 func (i *listInteractor) Handle(
 	ctx context.Context,
-	date *valueobject.PaymentDate,
+	date *valueobject.Date,
 ) (presenter.I, error) {
 	payments, err := i.paymentRepos.GetByDate(date.Get())
 	if err != nil {
