@@ -1,4 +1,4 @@
-package auth
+package payment
 
 import (
 	"encoding/json"
