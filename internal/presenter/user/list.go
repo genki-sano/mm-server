@@ -28,19 +28,25 @@ func (f *listFactory) New(users []*entity.User) presenter.I {
 // Exec method
 func (p *listPresenter) Exec() ([]byte, error) {
 	type listResponseItem struct {
-		AuthUserID string `json:"auth_user_id"`
 		Type       uint8  `json:"type"`
 		Name       string `json:"name"`
+		AuthUserID string `json:"auth_user_id"`
+	}
+	type listResponse struct {
+		Users []*listResponseItem `json:"users"`
 	}
 
-	resp := make([]*listResponseItem, 0, len(p.users))
+	items := make([]*listResponseItem, 0, len(p.users))
 	for _, user := range p.users {
 		item := &listResponseItem{
 			Type:       user.Type,
 			Name:       user.Name,
 			AuthUserID: *user.LineUserID,
 		}
-		resp = append(resp, item)
+		items = append(items, item)
+	}
+	resp := &listResponse{
+		Users: items,
 	}
 	return json.Marshal(resp)
 }

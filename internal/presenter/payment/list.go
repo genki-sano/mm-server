@@ -35,8 +35,11 @@ func (p *listPresenter) Exec() ([]byte, error) {
 		Category string `json:"category"`
 		Memo     string `json:"memo"`
 	}
+	type listResponse struct {
+		Payments []*listResponseItem `json:"payments"`
+	}
 
-	resp := make([]*listResponseItem, 0, len(p.payments))
+	items := make([]*listResponseItem, 0, len(p.payments))
 	for _, payment := range p.payments {
 		item := &listResponseItem{
 			ID:       payment.ID,
@@ -46,7 +49,10 @@ func (p *listPresenter) Exec() ([]byte, error) {
 			Category: payment.Category,
 			Memo:     payment.Memo,
 		}
-		resp = append(resp, item)
+		items = append(items, item)
+	}
+	resp := &listResponse{
+		Payments: items,
 	}
 	return json.Marshal(resp)
 }
