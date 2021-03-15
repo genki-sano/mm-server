@@ -7,7 +7,7 @@ import (
 )
 
 type service struct {
-	s *sheets.SpreadsheetsService
+	srv *sheets.SpreadsheetsService
 }
 
 func newService(ctx context.Context) (*service, error) {
@@ -16,12 +16,12 @@ func newService(ctx context.Context) (*service, error) {
 	if err != nil {
 		return nil, err
 	}
-	c := &service{
-		s: srv.Spreadsheets,
+	s := &service{
+		srv: srv.Spreadsheets,
 	}
-	return c, nil
+	return s, nil
 }
 
 func (s *service) get(spreadsheetID string, readRange string) (*sheets.ValueRange, error) {
-	return s.s.Values.Get(spreadsheetID, readRange).Do()
+	return s.srv.Values.Get(spreadsheetID, readRange).Do()
 }

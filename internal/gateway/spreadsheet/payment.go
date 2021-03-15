@@ -75,3 +75,6 @@ func (r *paymentRepository) GetByDate(t time.Time) ([]*entity.Payment, error) {
 	}
 	return payments, nil
 }
+
+func (r *paymentRepository) Save(*entity.Payment) error {
+}
