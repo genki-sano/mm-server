@@ -3,7 +3,6 @@ package spreadsheet
 import (
 	"context"
 
-	"google.golang.org/api/option"
 	"google.golang.org/api/sheets/v4"
 )
 
@@ -12,7 +11,8 @@ type service struct {
 }
 
 func newService(ctx context.Context) (*service, error) {
-	srv, err := sheets.NewService(ctx, option.WithScopes(sheets.SpreadsheetsReadonlyScope))
+	// Spreadsheetの書き込み権限まで付与されている想定
+	srv, err := sheets.NewService(ctx)
 	if err != nil {
 		return nil, err
 	}
