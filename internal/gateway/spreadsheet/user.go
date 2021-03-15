@@ -13,6 +13,7 @@ import (
 type userRepository struct {
 	srv           *service
 	spreadsheetID string
+	ctx           context.Context
 }
 
 // NewUserRepository method
@@ -27,12 +28,13 @@ func NewUserRepository() gateway.UserDataAccess {
 	return &userRepository{
 		srv:           srv,
 		spreadsheetID: id,
+		ctx:           ctx,
 	}
 }
 
 func (r *userRepository) GetAll() ([]*entity.User, error) {
 	readRange := "users!A2:F"
-	valueRange, err := r.srv.get(r.spreadsheetID, readRange)
+	valueRange, err := r.srv.get(r.ctx, r.spreadsheetID, readRange)
 	if err != nil {
 		return nil, err
 	}

@@ -22,6 +22,7 @@ func newService(ctx context.Context) (*service, error) {
 	return s, nil
 }
 
-func (s *service) get(spreadsheetID string, readRange string) (*sheets.ValueRange, error) {
-	return s.srv.Values.Get(spreadsheetID, readRange).Do()
+// @see https://developers.google.com/sheets/api/reference/rest/v4/spreadsheets.values/get
+func (s *service) get(ctx context.Context, spreadsheetID string, readRange string) (*sheets.ValueRange, error) {
+	return s.srv.Values.Get(spreadsheetID, readRange).Context(ctx).Do()
 }

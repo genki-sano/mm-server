@@ -14,6 +14,7 @@ import (
 type paymentRepository struct {
 	srv           *service
 	spreadsheetID string
+	ctx           context.Context
 }
 
 // NewPaymentRepository method
@@ -28,12 +29,13 @@ func NewPaymentRepository() gateway.PaymentDataAccess {
 	return &paymentRepository{
 		srv:           srv,
 		spreadsheetID: id,
+		ctx:           ctx,
 	}
 }
 
 func (r *paymentRepository) GetByDate(t time.Time) ([]*entity.Payment, error) {
 	readRange := t.Format("2006-01") + "!A:J"
-	valueRange, err := r.srv.get(r.spreadsheetID, readRange)
+	valueRange, err := r.srv.get(r.ctx, r.spreadsheetID, readRange)
 	if err != nil {
 		return nil, err
 	}
@@ -74,7 +76,4 @@ func (r *paymentRepository) GetByDate(t time.Time) ([]*entity.Payment, error) {
 		payments = append(payments, payment)
 	}
 	return payments, nil
-}
-
-func (r *paymentRepository) Save(*entity.Payment) error {
 }
