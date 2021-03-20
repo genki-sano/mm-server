@@ -9,5 +9,5 @@ import (
 
 // PaytmentListUsecase type
 type PaytmentListUsecase interface {
-	Handle(context.Context, *valueobject.Date) (presenter.I, error)
+	Handle(context.Context, *valueobject.Month) (presenter.I, error)
 }

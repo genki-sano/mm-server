@@ -2,13 +2,13 @@ package valueobject
 
 import "time"
 
-// Date type
-type Date struct {
+// Month type
+type Month struct {
 	value time.Time
 }
 
-// NewDate method
-func NewDate(value string) (*Date, error) {
+// NewMonth method
+func NewMonth(value string) (*Month, error) {
 	if value == "" {
 		return nil, newRequiredError("日付")
 	}
@@ -18,10 +18,10 @@ func NewDate(value string) (*Date, error) {
 		return nil, newFormatError("日付")
 	}
 
-	return &Date{value: date}, nil
+	return &Month{value: date}, nil
 }
 
 // Get method
-func (vo *Date) Get() time.Time {
+func (vo *Month) Get() time.Time {
 	return vo.value
 }

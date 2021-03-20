@@ -51,7 +51,7 @@ func (r *paymentRepository) GetByDate(t time.Time) ([]*entity.Payment, error) {
 			// TODO: エラーハンドリングを悩み中
 			log.Fatalf(err.Error())
 		}
-		userID, err := strconv.Atoi(items[1].(string))
+		UserType, err := strconv.Atoi(items[1].(string))
 		if err != nil {
 			// TODO: エラーハンドリングを悩み中
 			log.Fatalf(err.Error())
@@ -67,7 +67,7 @@ func (r *paymentRepository) GetByDate(t time.Time) ([]*entity.Payment, error) {
 		}
 		payment := &entity.Payment{
 			ID:       uint32(id),
-			UserID:   uint32(userID),
+			UserType: uint8(UserType),
 			Category: items[2].(string),
 			Price:    uint32(price),
 			Date:     date,

@@ -29,7 +29,7 @@ func (f *listFactory) New(payments []*entity.Payment) presenter.I {
 func (p *listPresenter) Exec() ([]byte, error) {
 	type listResponseItem struct {
 		ID       uint32 `json:"id"`
-		UserID   uint32 `json:"user_id"`
+		UserType uint8  `json:"user_id"`
 		Date     string `json:"date"`
 		Price    uint32 `json:"price"`
 		Category string `json:"category"`
@@ -43,7 +43,7 @@ func (p *listPresenter) Exec() ([]byte, error) {
 	for _, payment := range p.payments {
 		item := &listResponseItem{
 			ID:       payment.ID,
-			UserID:   payment.UserID,
+			UserType: payment.UserType,
 			Date:     payment.Date.Format("2006/01/02"),
 			Price:    payment.Price,
 			Category: payment.Category,
