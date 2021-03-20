@@ -11,6 +11,15 @@ import (
 	usecase "github.com/genki-sano/mm-server/internal/usecase/payment"
 )
 
+func InitializePaymentCreate() *controller.CreateController {
+	wire.Build(
+		controller.NewCreateController,
+		spreadsheet.NewPaymentRepository,
+		usecase.NewCreateUsecase,
+	)
+	return nil
+}
+
 func InitializePaymentList() *controller.ListController {
 	wire.Build(
 		controller.NewListController,

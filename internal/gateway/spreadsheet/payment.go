@@ -9,6 +9,7 @@ import (
 
 	"github.com/genki-sano/mm-server/internal/entity"
 	"github.com/genki-sano/mm-server/internal/gateway"
+	"google.golang.org/api/sheets/v4"
 )
 
 type paymentRepository struct {
@@ -76,4 +77,46 @@ func (r *paymentRepository) GetByDate(t time.Time) ([]*entity.Payment, error) {
 		payments = append(payments, payment)
 	}
 	return payments, nil
+}
+
+func (r *paymentRepository) Insert(payment *entity.Payment) error {
+	readRange := "payments!A:A"
+	valueRange, err := r.srv.get(r.ctx, r.spreadsheetID, readRange)
+	if err != nil {
+		return err
+	}
+
+	lastRow := len(valueRange.Values)
+	row := strconv.Itoa(lastRow + 1)
+
+	uid := lastRow
+
+	now := time.Now()
+
+	item := make([]interface{}, 0, 11)
+	item = append(item, uid)
+	item = append(item, payment.UserType)
+	item = append(item, payment.Category)
+	item = append(item, payment.Price)
+	item = append(item, payment.Date.Format("2006/01/02"))
+	item = append(item, payment.Memo)
+	item = append(item, payment.UserType)
+	item = append(item, payment.UserType)
+	item = append(item, now.Format("2006/01/02 15:04:05"))
+	item = append(item, now.Format("2006/01/02 15:04:05"))
+	item = append(item, "=DATEVALUE(E"+row+")")
+
+	values := make([][]interface{}, 0, 1)
+	values = append(values, item)
+
+	appendRange := "payments!A:J"
+	rb := &sheets.ValueRange{
+		Values: values,
+	}
+
+	if _, err := r.srv.insert(r.ctx, r.spreadsheetID, appendRange, rb); err != nil {
+		return err
+	}
+
+	return nil
 }

@@ -30,6 +30,7 @@ func Route() *gin.Engine {
 
 	payments := api.Group("/payments")
 	payments.GET("", di.InitializePaymentList().Handler)
+	payments.POST("", di.InitializePaymentCreate().Handler)
 
 	users := api.Group("/users")
 	users.GET("", di.InitializeUserList().Handler)

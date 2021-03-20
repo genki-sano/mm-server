@@ -24,3 +24,8 @@ func newContainMutibyteError(field string) error {
 	msg := fmt.Sprintf("%sに利用できない文字が含まれています。", field)
 	return errors.New(msg)
 }
+
+func newContainItemsError(field string) error {
+	msg := fmt.Sprintf("%sに利用できない選択肢が含まれています。", field)
+	return errors.New(msg)
+}

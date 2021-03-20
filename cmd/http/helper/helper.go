@@ -38,6 +38,13 @@ func CreateSuccessResponseData(p presenter.I) ResposeData {
 	}
 }
 
+// CreateSuccessNoContentResponseData method
+func CreateSuccessNoContentResponseData() ResposeData {
+	return ResposeData{
+		Status: http.StatusNoContent,
+	}
+}
+
 // CreateErrorResponseData method
 func CreateErrorResponseData(status int, err error) ResposeData {
 	log.Printf("ERROR: %s", err.Error())

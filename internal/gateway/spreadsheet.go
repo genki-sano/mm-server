@@ -9,6 +9,7 @@ import (
 // PaymentDataAccess type
 type PaymentDataAccess interface {
 	GetByDate(time.Time) ([]*entity.Payment, error)
+	Insert(payment *entity.Payment) error
 }
 
 // UserDataAccess type
