@@ -36,3 +36,38 @@ func (s *service) insert(ctx context.Context, spreadsheetID string, appendRange 
 func (s *service) update(ctx context.Context, spreadsheetID string, updateRange string, valueRange *sheets.ValueRange) (*sheets.UpdateValuesResponse, error) {
 	return s.srv.Values.Update(spreadsheetID, updateRange, valueRange).ValueInputOption("USER_ENTERED").Context(ctx).Do()
 }
+
+func (s *service) isSheet(ctx context.Context, spreadsheetID string, sheetTitle string) (bool, error) {
+	ss, err := s.srv.Get(spreadsheetID).Context(ctx).Do()
+	if err != nil {
+		return false, err
+	}
+
+	isSheet := false
+	for _, sheet := range ss.Sheets {
+		if sheet.Properties.Title == sheetTitle {
+			isSheet = true
+		}
+	}
+	return isSheet, nil
+}
+
+func (s *service) addSheet(ctx context.Context, spreadsheetID string, sheetIndex int64, sheetTitle string) error {
+	req := sheets.Request{
+		AddSheet: &sheets.AddSheetRequest{
+			Properties: &sheets.SheetProperties{
+				Index: sheetIndex,
+				Title: sheetTitle,
+			},
+		},
+	}
+
+	rb := &sheets.BatchUpdateSpreadsheetRequest{
+		Requests: []*sheets.Request{&req},
+	}
+
+	if _, err := s.srv.BatchUpdate(spreadsheetID, rb).Context(ctx).Do(); err != nil {
+		return err
+	}
+	return nil
+}

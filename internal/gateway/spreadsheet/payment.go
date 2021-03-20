@@ -3,6 +3,7 @@ package spreadsheet
 import (
 	"context"
 	"log"
+	"math"
 	"os"
 	"strconv"
 	"time"
@@ -80,6 +81,10 @@ func (r *paymentRepository) GetByDate(t time.Time) ([]*entity.Payment, error) {
 }
 
 func (r *paymentRepository) Insert(payment *entity.Payment) error {
+	if err := r.isFirstInTheMonth(payment.Date); err != nil {
+		return err
+	}
+
 	readRange := "payments!A:A"
 	valueRange, err := r.srv.get(r.ctx, r.spreadsheetID, readRange)
 	if err != nil {
@@ -118,5 +123,44 @@ func (r *paymentRepository) Insert(payment *entity.Payment) error {
 		return err
 	}
 
+	return nil
+}
+
+func (r *paymentRepository) isFirstInTheMonth(date time.Time) error {
+	sheetTitle := date.Format("2006-01")
+
+	isSheet, err := r.srv.isSheet(r.ctx, r.spreadsheetID, sheetTitle)
+	if err != nil {
+		return err
+	}
+
+	if isSheet {
+		return nil
+	}
+
+	if err := r.srv.addSheet(r.ctx, r.spreadsheetID, 2, sheetTitle); err != nil {
+		return err
+	}
+
+	thisT := time.Date(date.Year(), date.Month(), 1, 0, 0, 0, 0, time.UTC)
+	nextT := thisT.AddDate(0, 1, 0)
+
+	thisMonth := strconv.FormatFloat(math.Floor(TimeToExcelTime(thisT, false)), 'f', -1, 64)
+	nextMonth := strconv.FormatFloat(math.Floor(TimeToExcelTime(nextT, false)), 'f', -1, 64)
+
+	item := make([]interface{}, 0, 1)
+	item = append(item, "=QUERY(payments!A2:K,\"select A,B,C,D,E,F,G,H,I,J where K >= "+thisMonth+" and K < "+nextMonth+" order by K desc\")")
+
+	values := make([][]interface{}, 0, 1)
+	values = append(values, item)
+
+	appendRange := sheetTitle + "!A1"
+	rb := &sheets.ValueRange{
+		Values: values,
+	}
+
+	if _, err := r.srv.insert(r.ctx, r.spreadsheetID, appendRange, rb); err != nil {
+		return err
+	}
 	return nil
 }
