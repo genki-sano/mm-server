@@ -142,8 +142,8 @@ func (r *paymentRepository) isFirstInTheMonth(date time.Time) error {
 	thisT := time.Date(date.Year(), date.Month(), 1, 0, 0, 0, 0, time.UTC)
 	nextT := thisT.AddDate(0, 1, 0)
 
-	thisMonth := strconv.FormatFloat(math.Floor(TimeToExcelTime(thisT, false)), 'f', -1, 64)
-	nextMonth := strconv.FormatFloat(math.Floor(TimeToExcelTime(nextT, false)), 'f', -1, 64)
+	thisMonth := strconv.FormatFloat(math.Floor(timeToSerialValue(thisT, false)), 'f', -1, 64)
+	nextMonth := strconv.FormatFloat(math.Floor(timeToSerialValue(nextT, false)), 'f', -1, 64)
 
 	item := make([]interface{}, 0, 1)
 	item = append(item, "=QUERY(payments!A2:K,\"select A,B,C,D,E,F,G,H,I,J where K >= "+thisMonth+" and K < "+nextMonth+" order by K desc\")")

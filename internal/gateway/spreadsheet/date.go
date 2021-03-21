@@ -24,7 +24,7 @@ var (
 	daysBetween1970And1904 = float64(unixEpoc.Sub(excel1904Epoc) / (24 * time.Hour))
 )
 
-func TimeToExcelTime(t time.Time, date1904 bool) float64 {
+func timeToSerialValue(t time.Time, date1904 bool) float64 {
 	daysSinceUnixEpoc := float64(t.Unix()) / secondsInADay
 	nanosPart := float64(t.Nanosecond()) / nanosInADay
 	var offsetDays float64
