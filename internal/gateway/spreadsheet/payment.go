@@ -53,7 +53,7 @@ func (r *paymentRepository) GetByDate(t time.Time) ([]*entity.Payment, error) {
 			// TODO: エラーハンドリングを悩み中
 			log.Fatalf(err.Error())
 		}
-		UserType, err := strconv.Atoi(items[1].(string))
+		userType, err := strconv.Atoi(items[1].(string))
 		if err != nil {
 			// TODO: エラーハンドリングを悩み中
 			log.Fatalf(err.Error())
@@ -69,7 +69,7 @@ func (r *paymentRepository) GetByDate(t time.Time) ([]*entity.Payment, error) {
 		}
 		payment := &entity.Payment{
 			ID:       uint32(id),
-			UserType: uint8(UserType),
+			UserType: uint8(userType),
 			Category: items[2].(string),
 			Price:    uint32(price),
 			Date:     date,
@@ -85,16 +85,13 @@ func (r *paymentRepository) Insert(payment *entity.Payment) error {
 		return err
 	}
 
-	readRange := "payments!A:A"
-	valueRange, err := r.srv.get(r.ctx, r.spreadsheetID, readRange)
+	lastRow, err := r.srv.getLastRow(r.ctx, r.spreadsheetID, "payments")
 	if err != nil {
 		return err
 	}
 
-	lastRow := len(valueRange.Values)
-	row := strconv.Itoa(lastRow + 1)
-
 	uid := lastRow
+	row := lastRow + 1
 
 	now := time.Now()
 
@@ -109,7 +106,7 @@ func (r *paymentRepository) Insert(payment *entity.Payment) error {
 	item = append(item, payment.UserType)
 	item = append(item, now.Format("2006/01/02 15:04:05"))
 	item = append(item, now.Format("2006/01/02 15:04:05"))
-	item = append(item, "=DATEVALUE(E"+row+")")
+	item = append(item, "=DATEVALUE(E"+strconv.Itoa(row)+")")
 
 	values := make([][]interface{}, 0, 1)
 	values = append(values, item)

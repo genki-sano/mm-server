@@ -37,6 +37,15 @@ func (s *service) update(ctx context.Context, spreadsheetID string, updateRange 
 	return s.srv.Values.Update(spreadsheetID, updateRange, valueRange).ValueInputOption("USER_ENTERED").Context(ctx).Do()
 }
 
+func (s *service) getLastRow(ctx context.Context, spreadsheetID string, sheetTitle string) (int, error) {
+	readRange := sheetTitle + "!A:A"
+	valueRange, err := s.srv.Values.Get(spreadsheetID, readRange).Context(ctx).Do()
+	if err != nil {
+		return 0, err
+	}
+	return len(valueRange.Values), nil
+}
+
 func (s *service) isSheet(ctx context.Context, spreadsheetID string, sheetTitle string) (bool, error) {
 	ss, err := s.srv.Get(spreadsheetID).Context(ctx).Do()
 	if err != nil {
