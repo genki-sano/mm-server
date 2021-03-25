@@ -7,9 +7,9 @@ type Memo struct {
 
 // NewMemo method
 func NewMemo(value string) (*Memo, error) {
-	if containMutibyte(value) {
-		return nil, newContainMutibyteError("メモ")
-	}
+	// if containMutibyte(value) {
+	// 	return nil, newContainMutibyteError("メモ")
+	// }
 
 	return &Memo{value: value}, nil
 }

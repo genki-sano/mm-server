@@ -29,9 +29,9 @@ func NewCategory(value string) (*Category, error) {
 	if value == "" {
 		return nil, newRequiredError("カテゴリ")
 	}
-	if containMutibyte(value) {
-		return nil, newContainMutibyteError("カテゴリ")
-	}
+	// if containMutibyte(value) {
+	// 	return nil, newContainMutibyteError("カテゴリ")
+	// }
 	if !containCategories(value) {
 		return nil, newContainItemsError("カテゴリ")
 	}
