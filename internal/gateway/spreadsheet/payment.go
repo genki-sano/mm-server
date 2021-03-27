@@ -13,6 +13,8 @@ import (
 	"google.golang.org/api/sheets/v4"
 )
 
+const location = "Asia/Tokyo"
+
 type paymentRepository struct {
 	srv           *service
 	spreadsheetID string
@@ -92,6 +94,12 @@ func (r *paymentRepository) Insert(payment *entity.Payment) error {
 
 	uid := lastRow
 	row := lastRow + 1
+
+	loc, err := time.LoadLocation(location)
+	if err != nil {
+		loc = time.FixedZone(location, 9*60*60)
+	}
+	time.Local = loc
 
 	now := time.Now()
 
