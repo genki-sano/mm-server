@@ -6,6 +6,7 @@ import (
 	"github.com/google/wire"
 
 	controller "github.com/genki-sano/mm-server/cmd/http/controller/payment"
+	"github.com/genki-sano/mm-server/internal/gateway/linebot"
 	"github.com/genki-sano/mm-server/internal/gateway/spreadsheet"
 	presenter "github.com/genki-sano/mm-server/internal/presenter/payment"
 	usecase "github.com/genki-sano/mm-server/internal/usecase/payment"
@@ -14,7 +15,9 @@ import (
 func InitializePaymentCreate() *controller.CreateController {
 	wire.Build(
 		controller.NewCreateController,
+		spreadsheet.NewUserRepository,
 		spreadsheet.NewPaymentRepository,
+		linebot.NewLineGateway,
 		usecase.NewCreateUsecase,
 	)
 	return nil

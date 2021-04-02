@@ -6,6 +6,7 @@ import "context"
 type LineDataAccess interface {
 	VerifyToken(context.Context, string) (*VerifyTokenResponse, error)
 	GetProfile(context.Context, string) (*UserProfileResponse, error)
+	PushFlexMessage(string, string, []byte) error
 }
 
 // VerifyTokenResponse type
