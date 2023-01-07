@@ -39,7 +39,8 @@ jobs:
       - name: Setup Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
 
+      - name: Decrypt secret.yaml
+        run: sops -d secret.enc.yaml > secret.yaml
+
       - name: Deploy to App Engine
-        run: |
-          sops -d secret.enc.yaml > secret.yaml
-          gcloud app deploy app.yaml --quiet --no-promote --version v1
+        run: gcloud app deploy app.yaml --quiet --no-promote --version v1
